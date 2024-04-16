@@ -10,4 +10,9 @@ export class CurrencyController {
   createCurrency(@Body() body: createCurrencyDto) {
     return this.currService.createCurrency(body.title);
   }
+
+  @Post('/:id')
+  editCurrency(@Body() body: createCurrencyDto, @Param('id') id: number) {
+    return this.currService.editCurrency(body.title, id);
+  }
 }

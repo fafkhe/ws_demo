@@ -22,10 +22,23 @@ export class CurrencyService {
     const Title = title;
 
     await this.dataSource.manager.query(
-    ` INSERT INTO Currency (Title)
+      ` INSERT INTO Currency (Title)
        VALUES ($1)
     ;`,
       [Title],
     );
+  }
+
+  async editCurrency(title: string, id: number) {
+    await this.dataSource.manager.query(
+      `
+      UPDATE Currency
+      SET title = $2
+      WHERE id = $1
+      `,
+      [id, title],
+    );
+
+    return 'ok';
   }
 }
