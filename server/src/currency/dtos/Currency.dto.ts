@@ -1,8 +1,9 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, MinLength } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class createCurrencyDto {
   @IsString()
+  @MinLength(1)
   title: string;
 }
 

@@ -47,15 +47,28 @@ export class CurrencyService {
     const page = data.page || 0;
     const limit = data.limit || 10;
 
-    const currencies = await this.dataSource.manager.query(
-      `
+    const [currencies, countArr] = await Promise.all([
+      this.dataSource.manager.query(
+        `
       SELECT c.id as id, c.title as title
         FROM public.Currency c
-        OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY
+        ORDER BY id OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY
       `,
-      [page * limit, limit],
-    );
+        [page * limit, limit],
+      ),
+      this.dataSource.manager.query(
+        `
+      SELECT count(id)
+      FROM public.Currency
+      `,
+      ),
+    ]);
 
-    return currencies;
+    const count = countArr[0]?.count || 0;
+
+    return {
+      currencies,
+      count,
+    };
   }
 }
