@@ -1,4 +1,5 @@
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class createRateDto {
   @IsNumber()
@@ -31,3 +32,13 @@ export class editRateDto {
   amount: number;
 }
 
+
+export class RateQueryDto {
+
+  @IsOptional()
+  limit: number;
+
+  @Transform(({ value }) => parseInt(value))
+  @IsOptional()
+  page: number;
+}

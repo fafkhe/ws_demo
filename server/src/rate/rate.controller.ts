@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { RateService } from './rate.service';
 import {
+  RateQueryDto,
   createRateDto,
   editRateDto,
   singleRateByCurrDto,
@@ -23,5 +24,10 @@ export class RateController {
   @Get('singleRate')
   singleRateByCurr(@Body() body: singleRateByCurrDto) {
     return this.rateService.singleRateBycurrency(body);
+  }
+
+  @Get('all')
+  all(@Query() query: RateQueryDto) {
+    return this.rateService.allRates(query);
   }
 }

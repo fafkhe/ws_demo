@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import {
+  RateQueryDto,
   createRateDto,
   editRateDto,
   singleRateByCurrDto,
@@ -113,5 +114,40 @@ export class RateService {
     );
 
     return 'ok';
+  }
+
+  async allRates(data: RateQueryDto) {
+    const page = data.page || 0;
+    const limit = data.limit || 10;
+
+    const [rates, countArr] = await Promise.all([
+      this.dataSource.manager.query(
+        `
+        SELECT r.id as id, r.amount as amount, oc.id as originId, oc.title as originTitle, dc.id as destination_id, dc.title as destination_Title
+        FROM public.Rate r
+        JOIN public.Currency oc
+        ON  r.origin = oc.id
+        JOIN public.Currency dc
+        ON r.destination = dc.id
+        ORDER BY id OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY
+        `,
+        [page * limit, limit],
+      ),
+      this.dataSource.manager.query(
+        `
+      SELECT count(id)
+      FROM public.Rate
+      `,
+      ),
+    ]);
+
+    const count = countArr[0]?.count || 0;
+
+    const result = rates.map(this.convertor);
+
+    return {
+      result,
+      count,
+    };
   }
 }
