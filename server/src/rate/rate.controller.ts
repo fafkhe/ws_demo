@@ -1,19 +1,18 @@
-import { Controller, Post ,Body} from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { RateService } from './rate.service';
-import { createRateDto } from './dtos/rate.dto';
+import { createRateDto, singleRateByCurrDto } from './dtos/rate.dto';
 
 @Controller('rate')
 export class RateController {
-  
-  constructor(private rateService: RateService) { }
-  
+  constructor(private rateService: RateService) {}
 
   @Post('create')
-  createRate(@Body() body:createRateDto)  {
-    return this.rateService.createRate(body)
+  createRate(@Body() body: createRateDto) {
+    return this.rateService.createRate(body);
   }
 
-
-
-
+  @Get('singleRate')
+  singleRateByCurr(@Body() body: singleRateByCurrDto) {
+    return this.rateService.singleRateBycurrency(body);
+  }
 }
