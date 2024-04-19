@@ -79,14 +79,12 @@ export class RateService {
     if (rateArr.length == 0)
       throw new BadRequestException('there is no rate with this id ');
 
-    const result = await rateArr.map(this.convertor);
+    const result = rateArr.map(this.convertor);
 
     return result;
   }
 
   async editRate(body: editRateDto, id: number) {
-    const from = body.from;
-    const to = body.to;
     const amount = body.amount;
 
     if (isNaN(id)) {
@@ -101,16 +99,16 @@ export class RateService {
       [id],
     );
 
-    if (rateArr.length < 1)
+    if (!rateArr.length)
       throw new BadRequestException('there is no rate with this id');
 
     await this.dataSource.query(
       `
       UPDATE Rate
-      SET origin = $2, destination = $3, amount = $4
+      SET amount = $2
       WHERE id = $1
       `,
-      [id, from, to, amount],
+      [id, amount],
     );
 
     return 'ok';
