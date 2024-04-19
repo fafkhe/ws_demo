@@ -148,4 +148,30 @@ export class RateService {
       count,
     };
   }
+
+  async singleRateById(id: number) {
+    if (isNaN(id)) {
+      throw new BadRequestException('Not a Number!');
+    }
+    const singleRate = await this.dataSource.query(
+      `
+      SELECT r.id as id, r.amount as amount, oc.id as originId, oc.title as originTitle, dc.id as destination_id, dc.title as destination_Title
+      FROM public.Rate r
+      JOIN public.Currency oc
+      ON  r.origin = oc.id
+      JOIN public.Currency dc
+      ON r.destination = dc.id
+      WHERE (r.id = $1)
+      
+      `,
+      [id],
+    );
+
+    if (!singleRate.length)
+      throw new BadRequestException('there is no rate with this id ');
+
+    const result = singleRate.map(this.convertor);
+
+    return result;
+  }
 }

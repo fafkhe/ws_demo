@@ -30,4 +30,9 @@ export class RateController {
   all(@Query() query: RateQueryDto) {
     return this.rateService.allRates(query);
   }
+
+  @Get('single/:id')
+  singleRate(@Param('id') id: string) {
+    return this.rateService.singleRateById(+id);
+  }
 }
