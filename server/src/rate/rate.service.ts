@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { createRateDto, singleRateByCurrDto } from './dtos/rate.dto';
+import {
+  createRateDto,
+  editRateDto,
+  singleRateByCurrDto,
+} from './dtos/rate.dto';
 
 @Injectable()
 export class RateService {
@@ -74,10 +78,40 @@ export class RateService {
     if (rateArr.length == 0)
       throw new BadRequestException('there is no rate with this id ');
 
-    console.log(rateArr, 'ppp');
+    const result = await rateArr.map(this.convertor);
 
-    const x = await rateArr.map(this.convertor);
+    return result;
+  }
 
-    return x;
+  async editRate(body: editRateDto, id: number) {
+    const from = body.from;
+    const to = body.to;
+    const amount = body.amount;
+
+    if (isNaN(id)) {
+      throw new BadRequestException('Not a Number!');
+    }
+
+    const rateArr = await this.dataSource.query(
+      `
+      SELECT * FROM Rate
+      WHERE id = $1
+      `,
+      [id],
+    );
+
+    if (rateArr.length < 1)
+      throw new BadRequestException('there is no rate with this id');
+
+    await this.dataSource.query(
+      `
+      UPDATE Rate
+      SET origin = $2, destination = $3, amount = $4
+      WHERE id = $1
+      `,
+      [id, from, to, amount],
+    );
+
+    return 'ok';
   }
 }

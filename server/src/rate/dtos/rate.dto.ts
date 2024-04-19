@@ -18,3 +18,16 @@ export class singleRateByCurrDto {
   @IsNumber()
   to: number;
 }
+
+
+export class editRateDto {
+  @IsNumber()
+  from: number;
+
+  @IsNumber()
+  to: number;
+
+  @IsNumber()
+  amount: number;
+}
+
