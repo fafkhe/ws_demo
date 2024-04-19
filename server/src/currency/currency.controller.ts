@@ -20,4 +20,6 @@ export class CurrencyController {
   getAll(@Query() query: CurrencyQueryDto) {
     return this.currService.allCurrencies(query)
   }
+
+  
 }

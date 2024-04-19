@@ -22,7 +22,7 @@ export class CurrencyService {
     const Title = title;
 
     await this.dataSource.manager.query(
-      ` INSERT INTO Currency (Title)
+      `INSERT INTO Currency (Title)
       VALUES ($1)
       ;`,
       [Title],
