@@ -174,4 +174,26 @@ export class RateService {
 
     return result;
   }
+
+  async delete(id: number) {
+    const rateArr = await this.dataSource.query(
+      `
+     SELECT * FROM public.Rate
+     WHERE id = $1
+      `,
+      [id],
+    );
+
+    if (!rateArr.length)
+      throw new BadRequestException('there is no rate with this id');
+
+    await this.dataSource.query(
+      `
+      DELETE FROM Rate WHERE (Rate.id = $1)
+      `,
+      [id],
+    );
+
+    return 'ok';
+  }
 }

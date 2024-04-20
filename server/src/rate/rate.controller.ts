@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query, Delete } from '@nestjs/common';
 import { RateService } from './rate.service';
 import {
   RateQueryDto,
@@ -34,5 +34,10 @@ export class RateController {
   @Get('single/:id')
   singleRate(@Param('id') id: string) {
     return this.rateService.singleRateById(+id);
+  }
+
+  @Delete('/:id')
+  deleteRate(@Param('id') id: string) {
+    return this.rateService.delete(+id)
   }
 }
