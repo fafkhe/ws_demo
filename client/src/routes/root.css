@@ -1,0 +1,90 @@
+
+
+.root_table {
+  width: 90%;
+  border: 1px solid lightgray;
+  border-radius: 16px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.root_table_header {
+  display: flex;
+  justify-content: space-around;
+  background-color: #222;
+  font-weight: bold;
+  padding: 4px 8px;
+  cursor: not-allowed;
+  color: #fff
+}
+
+.root_table_header div {
+  width: 200px;
+
+}
+
+.root_table_body_row {
+  display: flex;
+  justify-content: space-around;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: .3s all;
+}
+
+.root_table_body_row:hover {
+  transform: scale(1.1);
+}
+
+.root_table_body_row:nth-child(odd) {
+  background: white;
+}
+
+.root_table_body_row:nth-child(even) {
+  background: lightgray
+}
+
+.root_table_body_row div {
+  width: 160px;
+}
+
+.root_ratemodal_backdrop {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, .7);
+  /* opacity: .1; */
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+
+.root_ratemodal {
+  width: 800px;
+  /* height: 400px; */
+  background-color: #fff;
+  border-radius: 12px;
+  position: absolute;
+  left: calc(50vw - 400px);
+  top: 150px;
+  z-index: 5;
+  padding: 8px 30px;
+}
+
+.root_ratemodal_details {
+  padding: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  border-bottom: 1px solid rgb(120, 95, 120);
+}
+
+.root_ratemodal_editrate {
+  /* background-color: black; */
+  margin-top: 12px;
+  padding-bottom: 20px;
+}
+
+.root_ratemodal_editrate button {
+  margin-left: 8px;
+  padding: 2px 4px;
+}
