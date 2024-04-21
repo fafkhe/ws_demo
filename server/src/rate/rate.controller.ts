@@ -11,17 +11,18 @@ import {
 export class RateController {
   constructor(private rateService: RateService) {}
 
-  @Post('/:id')
-  editRate(@Body() body: editRateDto, @Param('id') id: string) {
-    return this.rateService.editRate(body, +id);
-  }
-
   @Post('create')
   createRate(@Body() body: createRateDto) {
     return this.rateService.createRate(body);
   }
 
-  @Get('singleRate')
+  @Post('/edit/:id')
+  editRate(@Body() body: editRateDto, @Param('id') id: string) {
+    return this.rateService.editRate(body, +id);
+  }
+
+
+  @Post('single/cur')
   singleRateByCurr(@Body() body: singleRateByCurrDto) {
     return this.rateService.singleRateBycurrency(body);
   }

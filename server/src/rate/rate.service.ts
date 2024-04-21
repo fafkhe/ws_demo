@@ -76,12 +76,15 @@ export class RateService {
       [from, to],
     );
 
-    if (rateArr.length == 0)
-      throw new BadRequestException('there is no rate with this id ');
+    if (rateArr.length == 0) return {
+      result: null
+    };
 
-    const result = rateArr.map(this.convertor);
+    const [rate] = rateArr.map(this.convertor);
 
-    return result;
+    return {
+      result: rate
+    };
   }
 
   async editRate(body: editRateDto, id: number) {
