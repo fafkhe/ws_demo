@@ -34,7 +34,8 @@ export class RateService {
     id SERIAL PRIMARY KEY,
     origin INTEGER,
     destination INTEGER,
-    amount DECIMAL
+    amount DECIMAL,
+    last_amount DECIMAL
 
     );
     `;
@@ -49,10 +50,10 @@ export class RateService {
     if (from == to) throw new BadRequestException('something went wrong');
 
     await this.dataSource.manager.query(
-      `INSERT INTO Rate (origin,destination,amount)
-      VALUES ($1,$2,$3)
+      `INSERT INTO Rate (origin,destination,amount,last_amount)
+      VALUES ($1,$2,$3,$4)
       ;`,
-      [from, to, amount],
+      [from, to, amount, amount],
     );
     return 'ok';
   }
@@ -76,14 +77,15 @@ export class RateService {
       [from, to],
     );
 
-    if (rateArr.length == 0) return {
-      result: null
-    };
+    if (rateArr.length == 0)
+      return {
+        result: null,
+      };
 
     const [rate] = rateArr.map(this.convertor);
 
     return {
-      result: rate
+      result: rate,
     };
   }
 
@@ -108,10 +110,10 @@ export class RateService {
     await this.dataSource.query(
       `
       UPDATE Rate
-      SET amount = $2
+      SET amount = $2, last_amount=$3
       WHERE id = $1
       `,
-      [id, amount],
+      [id, amount, rateArr[0].amount],
     );
 
     return 'ok';
@@ -136,9 +138,9 @@ export class RateService {
       ),
       this.dataSource.manager.query(
         `
-      SELECT count(id)
-      FROM public.Rate
-      `,
+          SELECT count(id)
+          FROM public.Rate
+        `,
       ),
     ]);
 
